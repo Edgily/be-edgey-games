@@ -1,6 +1,8 @@
 const db = require("../db/connection.js");
 const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
+const request = require("supertest");
+const app = require("../app.js");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -71,9 +73,36 @@ describe("Is database seeded correctly?", () => {
   });
 });
 
-describe("", () => {
-  describe("", () => {
-    test("", () => {});
+describe("/api", () => {
+  describe("GET", () => {
+    test("returns a list of all endpoints", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then((res) => {
+          console.log(res.rows);
+        });
+    });
+  });
+});
+
+describe("/api/categories", () => {
+  describe("GET", () => {
+    test("returns an object with key of 'categories' whose property is an array of category objects with slug and description properties", () => {
+      return request(app)
+        .get("/api/categories")
+        .expect(200)
+        .then((res) => {
+          expect(typeof res.body).toBe("object");
+          expect(res.body.categories.length).toBe(4);
+          res.body.categories.forEach((category) => {
+            expect(category).toEqual({
+              slug: expect.any(String),
+              description: expect.any(String),
+            });
+          });
+        });
+    });
   });
 });
 
