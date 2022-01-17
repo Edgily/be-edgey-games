@@ -151,15 +151,4 @@ module.exports = [
     created_at: new Date(788918400),
     votes: 16,
   },
-  {
-    title: "Test Entry",
-    designer: "Testimus",
-    owner: "mallionaire",
-    review_img_url:
-      "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
-    review_body: "This is a test body.",
-    category: "social deduction",
-    created_at: undefined,
-    votes: 63,
-  },
 ];

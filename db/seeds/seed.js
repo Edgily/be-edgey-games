@@ -1,5 +1,11 @@
 const db = require("../connection");
 const format = require("pg-format");
+const {
+  formatCategories,
+  formatUsers,
+  formatReviews,
+  formatComments,
+} = require("../../utils/seed.utils.js");
 
 const seed = (data) => {
   const { categoryData, userData, reviewData, commentData } = data;
@@ -70,7 +76,7 @@ const seed = (data) => {
           VALUES
           %L
           RETURNING *;`,
-          categoryData.map((category) => [category.slug, category.description])
+          formatCategories(categoryData)
         );
         return db.query(query);
       })
@@ -81,7 +87,7 @@ const seed = (data) => {
           VALUES
           %L
           RETURNING *;`,
-          userData.map((user) => [user.username, user.name, user.avatar_url])
+          formatUsers(userData)
         );
         return db.query(query);
       })
@@ -92,16 +98,7 @@ const seed = (data) => {
           VALUES
           %L
           RETURNING *;`,
-          reviewData.map((review) => [
-            review.title,
-            review.owner,
-            review.category,
-            review.designer,
-            review.review_img_url,
-            review.review_body,
-            review.votes,
-            review.created_at,
-          ])
+          formatReviews(reviewData)
         );
         return db.query(query);
       })
@@ -112,18 +109,10 @@ const seed = (data) => {
           VALUES
           %L
           RETURNING *;`,
-          commentData.map((comment) => [
-            comment.review_id,
-            comment.author,
-            comment.body,
-            comment.votes,
-            comment.created_at,
-          ])
+          formatComments(commentData)
         );
         return db.query(query);
       })
-
-      .then(() => console.log("Database fully seeded."))
 
       // CATCH section
       .catch((err) => console.log(err))

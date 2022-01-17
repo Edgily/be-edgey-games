@@ -73,6 +73,22 @@ describe("Is database seeded correctly?", () => {
   });
 });
 
+describe("*", () => {
+  describe("ALL", () => {
+    test("returns an error message if invalid endpoint is used", () => {
+      return request(app)
+        .get("/whatsits")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message:
+              "No such endpoint. Try '/api' to see a list of all endpoints.",
+          });
+        });
+    });
+  });
+});
+
 describe("/api", () => {
   describe("GET", () => {
     test("returns a list of all endpoints", () => {
@@ -80,7 +96,7 @@ describe("/api", () => {
         .get("/api")
         .expect(200)
         .then((res) => {
-          console.log(res.rows);
+          expect(typeof res.body).toBe("object");
         });
     });
   });

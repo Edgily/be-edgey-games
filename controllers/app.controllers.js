@@ -1,7 +1,7 @@
 const app = require("../app");
 const { getCategoriesModel } = require("../models/app.models");
 
-exports.getApi = (req, res, next) => {
+exports.getEndpoints = (req, res, next) => {
   const endpoints = {
     "/api": "Get a list of all endpoints",
     "/api/categories": "Get a list of all categories",
