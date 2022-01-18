@@ -2,10 +2,13 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.json());
+
 const apiRouter = require("./routers/api.routers.js");
 
 app.use("/api", apiRouter);
 
+// Invalid endpoint
 const { invalidEndpoint } = require("./errors/app.errors.js");
 
 app.all("*", invalidEndpoint);

@@ -21,3 +21,16 @@ exports.getReviewByIdModel = (review_id) => {
 
   return db.query(query, [review_id]).then((result) => result.rows[0]);
 };
+
+exports.patchReviewByIdModel = (inc_votes, review_id) => {
+  const query = `
+    UPDATE reviews
+    SET votes = votes + $1
+    WHERE review_id = $2
+    RETURNING *
+    ;`;
+
+  return db
+    .query(query, [inc_votes, review_id])
+    .then((result) => result.rows[0]);
+};

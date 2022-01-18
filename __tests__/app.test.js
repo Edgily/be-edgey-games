@@ -190,7 +190,7 @@ describe("/api/reviews/:review_id", () => {
         .send({ inc_votes: 5 })
         .then((res) => {
           expect(res.body).toEqual({
-            review: {
+            updated: {
               review_id: 2,
               title: "Jenga",
               owner: "philippaclaire9",
@@ -201,7 +201,6 @@ describe("/api/reviews/:review_id", () => {
               review_body: "Fiddly fun for all the family",
               votes: 10,
               created_at: "2021-01-18T10:01:41.251Z",
-              comment_count: "3",
             },
           });
         });
