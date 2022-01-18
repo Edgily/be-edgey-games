@@ -7,9 +7,9 @@ const app = require("../app.js");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("Is database seeded correctly?", () => {
+describe("Seed database", () => {
   describe("Categories table", () => {
-    test("Returns correct format", () => {
+    it("Returns correct format", () => {
       return db.query(`SELECT * FROM categories;`).then((res) => {
         res.rows.forEach((category) => {
           expect(category).toEqual({
@@ -22,7 +22,7 @@ describe("Is database seeded correctly?", () => {
   });
 
   describe("Users table", () => {
-    test("Returns correct format", () => {
+    it("Returns correct format", () => {
       return db.query(`SELECT * FROM users;`).then((res) => {
         res.rows.forEach((user) => {
           expect(user).toEqual({
@@ -36,7 +36,7 @@ describe("Is database seeded correctly?", () => {
   });
 
   describe("Reviews table", () => {
-    test("Returns correct format", () => {
+    it("Returns correct format", () => {
       return db.query(`SELECT * FROM reviews;`).then((res) => {
         res.rows.forEach((review) => {
           expect(review).toEqual({
@@ -56,7 +56,7 @@ describe("Is database seeded correctly?", () => {
   });
 
   describe("Comments table", () => {
-    test("Returns correct format", () => {
+    it("Returns correct format", () => {
       return db.query(`SELECT * FROM comments;`).then((res) => {
         res.rows.forEach((comment) => {
           expect(comment).toEqual({
@@ -75,14 +75,26 @@ describe("Is database seeded correctly?", () => {
 
 describe("*", () => {
   describe("ALL", () => {
-    test("returns an error message if invalid endpoint is used", () => {
+    it("Returns an error message if invalid endpoint is used", () => {
       return request(app)
         .get("/whatsits")
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({
             message:
-              "No such endpoint. Try '/api' to see a list of all endpoints.",
+              "Invalid endpoint. Try '/api' to see a list of all endpoints.",
+          });
+        });
+    });
+
+    it("Returns an error message if invalid endpoint is used", () => {
+      return request(app)
+        .get("/api/whatsits")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message:
+              "Invalid endpoint. Try '/api' to see a list of all endpoints.",
           });
         });
     });
@@ -91,7 +103,7 @@ describe("*", () => {
 
 describe("/api", () => {
   describe("GET", () => {
-    test("returns a list of all endpoints", () => {
+    it("Returns a list of all endpoints", () => {
       return request(app)
         .get("/api")
         .expect(200)
@@ -104,7 +116,7 @@ describe("/api", () => {
 
 describe("/api/categories", () => {
   describe("GET", () => {
-    test("returns an object with key of 'categories' whose property is an array of category objects with slug and description properties", () => {
+    it("Returns an object with key of 'categories' whose property is an array of category objects with slug and description properties", () => {
       return request(app)
         .get("/api/categories")
         .expect(200)
@@ -117,13 +129,50 @@ describe("/api/categories", () => {
               description: expect.any(String),
             });
           });
+          expect(res.body.categories[1]).toEqual({
+            slug: "social deduction",
+            description: "Players attempt to uncover each other's hidden role",
+          });
         });
     });
   });
 });
 
-describe.skip("", () => {
-  describe("", () => {
-    test("", () => {});
+describe("/api/reviews/:review_id", () => {
+  describe("GET", () => {
+    it("Returns a review object with correct keys", () => {
+      return request(app)
+        .get("/api/reviews/2")
+        .expect(200)
+        .then((res) => {
+          expect(res.body).toEqual({
+            review: {
+              review_id: 2,
+              title: "Jenga",
+              owner: "philippaclaire9",
+              category: "dexterity",
+              designer: "Leslie Scott",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Fiddly fun for all the family",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            },
+          });
+        });
+    });
+    it("Returns an error if given an ID with no entries", () => {
+      return request(app)
+        .get("/api/reviews/1")
+        .expect(404)
+        .then((res) => {});
+    });
   });
 });
+
+// describe("", () => {
+//   describe("", () => {
+//     test("", () => {});
+//   });
+// });
