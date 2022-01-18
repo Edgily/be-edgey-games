@@ -162,17 +162,49 @@ describe("/api/reviews/:review_id", () => {
           });
         });
     });
+
     it("Returns an error if given an ID with no entries", () => {
       return request(app)
         .get("/api/reviews/1")
         .expect(404)
-        .then((res) => {});
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Returns an error if given an invalid ID", () => {
+      return request(app)
+        .get("/api/reviews/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+  });
+
+  describe("PATCH", () => {
+    it("Return with an review object with votes count updated", () => {
+      return request(app)
+        .patch("/api/reviews/2")
+        .expect(200)
+        .send({ inc_votes: 5 })
+        .then((res) => {
+          expect(res.body).toEqual({
+            review: {
+              review_id: 2,
+              title: "Jenga",
+              owner: "philippaclaire9",
+              category: "dexterity",
+              designer: "Leslie Scott",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Fiddly fun for all the family",
+              votes: 10,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            },
+          });
+        });
     });
   });
 });
-
-// describe("", () => {
-//   describe("", () => {
-//     test("", () => {});
-//   });
-// });

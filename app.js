@@ -10,6 +10,15 @@ const { invalidEndpoint } = require("./errors/app.errors.js");
 
 app.all("*", invalidEndpoint);
 
+// Errors section
+const { errorCustom, errorPsql, errorAll } = require("./errors/app.errors.js");
+
+app.use(errorCustom);
+
+app.use(errorPsql);
+
+app.use(errorAll);
+
 module.exports = app;
 
 // planned endpoints:
