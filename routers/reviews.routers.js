@@ -1,6 +1,7 @@
 const express = require("express");
 
 const {
+  getReviews,
   getReviewById,
   patchReviewById,
 } = require("../controllers/reviews.controllers.js");
@@ -9,7 +10,7 @@ const reviewsRouter = express.Router();
 
 // all addresses have /api/reviews innately
 
-// reviewsRouter.route("/").get(placeHolder);
+reviewsRouter.route("/").get(getReviews);
 
 reviewsRouter.route("/:review_id").get(getReviewById).patch(patchReviewById);
 

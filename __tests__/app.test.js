@@ -250,3 +250,147 @@ describe("/api/reviews/:review_id", () => {
     });
   });
 });
+
+describe("/api/reviews", () => {
+  describe("GET", () => {
+    describe("sort_by query", () => {
+      it("Returns an array of review objects", () => {
+        return request(app)
+          .get("/api/reviews")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews.length).toEqual(13);
+            res.body.reviews.forEach((review) => {
+              expect.objectContaining({
+                review: {
+                  review_id: expect.any(Number),
+                  title: expect.any(String),
+                  owner: expect.any(String),
+                  category: expect.any(String),
+                  designer: expect.any(String),
+                  review_img_url: expect.any(String),
+                  review_body: expect.any(String),
+                  votes: expect.any(Number),
+                  created_at: expect.any(String),
+                  comment_count: expect.any(String),
+                },
+              });
+            });
+          });
+      });
+
+      it("Returns an array of review objects sorted by created_at DESC by default", () => {
+        return request(app)
+          .get("/api/reviews")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("created_at", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns an array of review objects with sort_by=title query", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=title")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("title", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns an array of review objects with sort_by=order query", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=owner")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("owner", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns an error for a blank sort_by", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+
+      it("Returns an error for an invalid sort_by", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=bana*n;as")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+
+      it("Returns an error for an invalid sort_by", () => {
+        return request(app)
+          .get("/api/reviews?sordfasdft_y=bana*n;as&osjdf=j'asdfk")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+    });
+
+    describe("order query", () => {
+      it("Returns the list of reviews in ASC order", () => {
+        return request(app)
+          .get("/api/reviews?order=asc")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("created_at", {
+              ascending: true,
+            });
+          });
+      });
+
+      it("Returns the list of reviews in DESC order", () => {
+        return request(app)
+          .get("/api/reviews?order=desc")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("created_at", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns an error if invalid value is used", () => {
+        return request(app)
+          .get("/api/reviews?order=ugh")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+
+      it("Returns an error if invalid query is used", () => {
+        return request(app)
+          .get("/api/reviews?ordd=ugh")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+    });
+
+    describe("category query", () => {
+      it("Returns a filtered list based on category query", () => {
+        return request(app)
+          .get("/api/reviews?category=social%deduction")
+          .expect(200)
+          .then((res) => {
+            console.log(res.body);
+          });
+      });
+    });
+  });
+});
