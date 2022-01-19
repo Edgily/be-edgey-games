@@ -165,7 +165,7 @@ describe("/api/reviews/:review_id", () => {
 
     it("Returns an error if given an ID with no entries", () => {
       return request(app)
-        .get("/api/reviews/1")
+        .get("/api/reviews/999")
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({ msg: "Not found" });
@@ -183,7 +183,7 @@ describe("/api/reviews/:review_id", () => {
   });
 
   describe("PATCH", () => {
-    it("Return with an review object with votes count updated", () => {
+    it("Returns a review object with votes count updated", () => {
       return request(app)
         .patch("/api/reviews/2")
         .expect(200)
@@ -203,6 +203,49 @@ describe("/api/reviews/:review_id", () => {
               created_at: "2021-01-18T10:01:41.251Z",
             },
           });
+        });
+    });
+
+    it("Returns a review object with votes count updated", () => {
+      return request(app)
+        .patch("/api/reviews/3")
+        .expect(200)
+        .send({ inc_votes: 3 })
+        .then((res) => {
+          expect(res.body).toEqual({
+            updated: {
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 8,
+              created_at: "2021-01-18T10:01:41.251Z",
+            },
+          });
+        });
+    });
+
+    it("Returns an error if given an ID with no entries", () => {
+      return request(app)
+        .patch("/api/reviews/999")
+        .send({ inc_votes: 5 })
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Return an error when given an invalid ID", () => {
+      return request(app)
+        .patch("/api/reviews/banana")
+        .expect(400)
+        .send({ inc_votes: 5 })
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
         });
     });
   });

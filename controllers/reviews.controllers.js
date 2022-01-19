@@ -25,7 +25,11 @@ exports.patchReviewById = async (req, res, next) => {
 
     const updated = await patchReviewByIdModel(inc_votes, review_id);
 
-    return res.status(200).send({ updated });
+    if (updated) {
+      return res.status(200).send({ updated });
+    } else {
+      throw { status: 404, msg: "Not found" };
+    }
   } catch (err) {
     next(err);
   }
