@@ -5,15 +5,11 @@ exports.getReviewsModel = (
   orderQuery = "DESC",
   categoryQuery
 ) => {
-  console.log("MODEL --->");
-
   let categoryLine = "";
 
-  console.log("CATEGORYQUERY --->", categoryQuery);
-
-  // if (categoryQuery) {
-  //   categoryLine = `HAVING reviews.category = '${categoryQuery}'`;
-  // }
+  if (categoryQuery) {
+    categoryLine = `HAVING reviews.category = '${categoryQuery}'`;
+  }
 
   const query = `
   SELECT
@@ -31,14 +27,14 @@ exports.getReviewsModel = (
   LEFT JOIN comments
     ON reviews.review_id = comments.review_id
   GROUP BY reviews.review_id, comments.review_id
+  ${categoryLine}
   ORDER BY ${sortQuery} ${orderQuery}
   ;
   `;
 
-  // ${categoryLine}
-  console.log(query);
-
-  return db.query(query).then((result) => result.rows);
+  return db.query(query).then((result) => {
+    return result.rows;
+  });
 };
 
 exports.getReviewByIdModel = (review_id) => {

@@ -388,7 +388,148 @@ describe("/api/reviews", () => {
           .get("/api/reviews?category=social%deduction")
           .expect(200)
           .then((res) => {
-            console.log(res.body);
+            res.body.reviews.forEach((item) => {
+              expect(item).toEqual(
+                expect.objectContaining({
+                  category: "social deduction",
+                })
+              );
+            });
+
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 7,
+              title: "Mollit elit qui incididunt veniam occaecat cupidatat",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Avery Wunzboogerz",
+              review_img_url:
+                "https://images.pexels.com/photos/278888/pexels-photo-278888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              review_body:
+                "Consectetur incididunt aliquip sunt officia. Magna ex nulla consectetur laboris incididunt ea non qui. Enim id eiusmod irure dolor ipsum in tempor consequat amet ullamco. Occaecat fugiat sint fugiat mollit consequat pariatur consequat non exercitation dolore. Labore occaecat in magna commodo anim enim eiusmod eu pariatur ad duis magna. Voluptate ad et dolore ullamco anim sunt do. Qui exercitation tempor in in minim ullamco fugiat ipsum. Duis irure voluptate cupidatat do id mollit veniam culpa. Velit deserunt exercitation amet laborum nostrud dolore in occaecat minim amet nostrud sunt in. Veniam ut aliqua incididunt commodo sint in anim duis id commodo voluptate sit quis.",
+              votes: 9,
+              created_at: "2021-01-25T11:16:54.963Z",
+              comment_count: "0",
+            });
+          });
+      });
+
+      it("Returns a filtered list based on category query", () => {
+        return request(app)
+          .get("/api/reviews?category=dexterity")
+          .expect(200)
+          .then((res) => {
+            res.body.reviews.forEach((item) => {
+              expect(item).toEqual(
+                expect.objectContaining({
+                  category: "dexterity",
+                })
+              );
+            });
+          });
+      });
+
+      it("Returns an error if invalid value is used", () => {
+        return request(app)
+          .get("/api/reviews?category=splergula")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+
+      it("Returns an error if invalid query is used", () => {
+        return request(app)
+          .get("/api/reviews?categodry=splergula")
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
+          });
+      });
+    });
+
+    describe("Combination queries", () => {
+      it("Returns a list sorted by title and ordered DESC", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=title&order=desc")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            });
+
+            expect(res.body.reviews).toBeSortedBy("title", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns a list sorted by designer DESC with only social deduction category", () => {
+        return request(app)
+          .get(
+            "/api/reviews?sort_by=designer&order=desc&category=social%deduction"
+          )
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("designer", {
+              descending: true,
+            });
+
+            res.body.reviews.forEach((item) => {
+              expect(item).toEqual(
+                expect.objectContaining({
+                  category: "social deduction",
+                })
+              );
+            });
+          });
+      });
+
+      it("Ignores invalid queries when a valid query exists - should return list of all reviews sorted by category DESC", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=category&order=desc&category=bananas")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("category", {
+              descending: true,
+            });
+
+            expect(res.body.reviews.length).toBe(13);
+          });
+      });
+
+      it("Ignores invalid queries when a valid query exists - should return list of all reviews sorted by (default) created_at DESC", () => {
+        return request(app)
+          .get(
+            "/api/reviews?sortdf_by=categgurgory&order=desc&categssfory=bananas"
+          )
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("created_at", {
+              descending: true,
+            });
+
+            expect(res.body.reviews.length).toBe(13);
+          });
+      });
+
+      it("Returns an error if no valid queries exist", () => {
+        return request(app)
+          .get(
+            "/api/reviews?sortdf_by=categgurgory&ordffer=deesc&categssfory=bananas"
+          )
+          .expect(400)
+          .then((res) => {
+            expect(res.body).toEqual({ msg: "Bad request" });
           });
       });
     });

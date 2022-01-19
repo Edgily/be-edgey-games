@@ -4,16 +4,18 @@ const {
   patchReviewByIdModel,
 } = require("../models/reviews.models.js");
 
-// const { selectCategories } = require("../utils/reviews.utils.js");
+const {
+  selectCategories,
+  removePercent,
+} = require("../utils/reviews.utils.js");
 
 exports.getReviews = async (req, res, next) => {
   try {
-    console.log("CONTROLLER --->");
-
     const { sort_by, order, category } = req.query;
 
+    let categoryFormatted = "";
     if (category) {
-      category = category.replace("%", " ");
+      categoryFormatted = category.replace("%", " ");
     }
 
     let sortQuery = undefined;
@@ -34,6 +36,8 @@ exports.getReviews = async (req, res, next) => {
 
     const allowedOrder = ["desc", "asc"];
 
+    const allowedCategory = await selectCategories();
+
     if (allowedSort.includes(sort_by)) {
       sortQuery = sort_by;
     }
@@ -42,9 +46,9 @@ exports.getReviews = async (req, res, next) => {
       orderQuery = order.toUpperCase();
     }
 
-    // if (allowedCategory.includes(category)) {
-    //   categoryQuery = category;
-    // }
+    if (allowedCategory.includes(categoryFormatted)) {
+      categoryQuery = categoryFormatted;
+    }
 
     if (Object.keys(req.query).length > 0) {
       if (!sortQuery && !orderQuery && !categoryQuery) {
@@ -52,16 +56,10 @@ exports.getReviews = async (req, res, next) => {
       }
     }
 
-    // console.log("QUERIES --->", sortQuery, orderQuery, categoryQuery);
-
     const reviews = await getReviewsModel(sortQuery, orderQuery, categoryQuery);
-
-    // console.log("REVIEWS --->", reviews);
 
     return res.status(200).send({ reviews: reviews });
   } catch (err) {
-    console.log("CATCH --->");
-
     next(err);
   }
 };

@@ -23,7 +23,7 @@ const seed = (data) => {
         return db.query(`DROP TABLE IF EXISTS reviews CASCADE;`);
       })
       .then(() => {
-        return db.query(`DROP TABLE IF EXISTS comments;`);
+        return db.query(`DROP TABLE IF EXISTS comments CASCADE;`);
       })
 
       // CREATE tables section
