@@ -138,119 +138,6 @@ describe("/api/categories", () => {
   });
 });
 
-describe("/api/reviews/:review_id", () => {
-  describe("GET", () => {
-    it("Returns a review object with correct keys", () => {
-      return request(app)
-        .get("/api/reviews/2")
-        .expect(200)
-        .then((res) => {
-          expect(res.body).toEqual({
-            review: {
-              review_id: 2,
-              title: "Jenga",
-              owner: "philippaclaire9",
-              category: "dexterity",
-              designer: "Leslie Scott",
-              review_img_url:
-                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-              review_body: "Fiddly fun for all the family",
-              votes: 5,
-              created_at: "2021-01-18T10:01:41.251Z",
-              comment_count: "3",
-            },
-          });
-        });
-    });
-
-    it("Returns an error if given an ID with no entries", () => {
-      return request(app)
-        .get("/api/reviews/999")
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({ msg: "Not found" });
-        });
-    });
-
-    it("Returns an error if given an invalid ID", () => {
-      return request(app)
-        .get("/api/reviews/banana")
-        .expect(400)
-        .then((res) => {
-          expect(res.body).toEqual({ msg: "Bad request" });
-        });
-    });
-  });
-
-  describe("PATCH", () => {
-    it("Returns a review object with votes count updated", () => {
-      return request(app)
-        .patch("/api/reviews/2")
-        .expect(200)
-        .send({ inc_votes: 5 })
-        .then((res) => {
-          expect(res.body).toEqual({
-            updated: {
-              review_id: 2,
-              title: "Jenga",
-              owner: "philippaclaire9",
-              category: "dexterity",
-              designer: "Leslie Scott",
-              review_img_url:
-                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-              review_body: "Fiddly fun for all the family",
-              votes: 10,
-              created_at: "2021-01-18T10:01:41.251Z",
-            },
-          });
-        });
-    });
-
-    it("Returns a review object with votes count updated", () => {
-      return request(app)
-        .patch("/api/reviews/3")
-        .expect(200)
-        .send({ inc_votes: 3 })
-        .then((res) => {
-          expect(res.body).toEqual({
-            updated: {
-              review_id: 3,
-              title: "Ultimate Werewolf",
-              owner: "bainesface",
-              category: "social deduction",
-              designer: "Akihisa Okui",
-              review_img_url:
-                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-              review_body: "We couldn't find the werewolf!",
-              votes: 8,
-              created_at: "2021-01-18T10:01:41.251Z",
-            },
-          });
-        });
-    });
-
-    it("Returns an error if given an ID with no entries", () => {
-      return request(app)
-        .patch("/api/reviews/999")
-        .send({ inc_votes: 5 })
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({ msg: "Not found" });
-        });
-    });
-
-    it("Return an error when given an invalid ID", () => {
-      return request(app)
-        .patch("/api/reviews/banana")
-        .expect(400)
-        .send({ inc_votes: 5 })
-        .then((res) => {
-          expect(res.body).toEqual({ msg: "Bad request" });
-        });
-    });
-  });
-});
-
 describe("/api/reviews", () => {
   describe("GET", () => {
     describe("sort_by query", () => {
@@ -307,6 +194,17 @@ describe("/api/reviews", () => {
           .expect(200)
           .then((res) => {
             expect(res.body.reviews).toBeSortedBy("owner", {
+              descending: true,
+            });
+          });
+      });
+
+      it("Returns an array of review objects with sort_by=review_id query", () => {
+        return request(app)
+          .get("/api/reviews?sort_by=review_id")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews).toBeSortedBy("review_id", {
               descending: true,
             });
           });
@@ -431,9 +329,9 @@ describe("/api/reviews", () => {
       it("Returns an error if invalid value is used", () => {
         return request(app)
           .get("/api/reviews?category=splergula")
-          .expect(400)
+          .expect(404)
           .then((res) => {
-            expect(res.body).toEqual({ msg: "Bad request" });
+            expect(res.body).toEqual({ msg: "Not found" });
           });
       });
 
@@ -497,13 +395,9 @@ describe("/api/reviews", () => {
       it("Ignores invalid queries when a valid query exists - should return list of all reviews sorted by category DESC", () => {
         return request(app)
           .get("/api/reviews?sort_by=category&order=desc&category=bananas")
-          .expect(200)
+          .expect(404)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("category", {
-              descending: true,
-            });
-
-            expect(res.body.reviews.length).toBe(13);
+            expect(res.body).toEqual({ msg: "Not found" });
           });
       });
 
@@ -532,6 +426,245 @@ describe("/api/reviews", () => {
             expect(res.body).toEqual({ msg: "Bad request" });
           });
       });
+    });
+  });
+});
+
+describe("/api/reviews/:review_id", () => {
+  describe("GET", () => {
+    it("Returns a review object with correct keys", () => {
+      return request(app)
+        .get("/api/reviews/2")
+        .expect(200)
+        .then((res) => {
+          expect(res.body).toEqual({
+            review: {
+              review_id: 2,
+              title: "Jenga",
+              owner: "philippaclaire9",
+              category: "dexterity",
+              designer: "Leslie Scott",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Fiddly fun for all the family",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            },
+          });
+        });
+    });
+
+    it("Returns an error if given an ID with no entries", () => {
+      return request(app)
+        .get("/api/reviews/999")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Returns an error if given an invalid ID", () => {
+      return request(app)
+        .get("/api/reviews/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+  });
+
+  describe("PATCH", () => {
+    it("Returns a review object with votes count updated", () => {
+      return request(app)
+        .patch("/api/reviews/2")
+        .expect(200)
+        .send({ inc_votes: 5 })
+        .then((res) => {
+          expect(res.body).toEqual({
+            updated: {
+              review_id: 2,
+              title: "Jenga",
+              owner: "philippaclaire9",
+              category: "dexterity",
+              designer: "Leslie Scott",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Fiddly fun for all the family",
+              votes: 10,
+              created_at: "2021-01-18T10:01:41.251Z",
+            },
+          });
+        });
+    });
+
+    it("Returns a review object with votes count updated", () => {
+      return request(app)
+        .patch("/api/reviews/3")
+        .expect(200)
+        .send({ inc_votes: 3 })
+        .then((res) => {
+          expect(res.body).toEqual({
+            updated: {
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 8,
+              created_at: "2021-01-18T10:01:41.251Z",
+            },
+          });
+        });
+    });
+
+    it("Returns an error if given an ID with no entries", () => {
+      return request(app)
+        .patch("/api/reviews/999")
+        .send({ inc_votes: 5 })
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Return an error when given an invalid ID", () => {
+      return request(app)
+        .patch("/api/reviews/banana")
+        .expect(400)
+        .send({ inc_votes: 5 })
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+  });
+});
+
+describe("/api/reviews/:review_id/comments", () => {
+  describe("GET", () => {
+    it("Returns an array of comments for the given review_id 2", () => {
+      return request(app)
+        .get("/api/reviews/2/comments")
+        .expect(200)
+        .then((res) => {
+          res.body.comments.forEach((item) => {
+            expect(item).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                author: expect.any(String),
+                body: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+              })
+            );
+          });
+        });
+    });
+
+    it("Returns an array of comments for the given review_id 3", () => {
+      return request(app)
+        .get("/api/reviews/3/comments")
+        .expect(200)
+        .then((res) => {
+          res.body.comments.forEach((item) => {
+            expect(item).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(Number),
+                author: expect.any(String),
+                body: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+              })
+            );
+          });
+        });
+    });
+
+    it("Returns an error when searching a valid ID that has no entries", () => {
+      return request(app)
+        .get("/api/reviews/999/comments")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Returns an error when searching an invalid ID", () => {
+      return request(app)
+        .get("/api/reviews/spatula/comments")
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+  });
+
+  describe("POST", () => {
+    it("Posts a new comment and returns the posted comment", () => {
+      return request(app)
+        .post("/api/reviews/5/comments")
+        .send({ username: "dav3rid", body: "Yo this review is lit" })
+        .expect(201)
+        .then((res) => {
+          // console.log(res.body);
+          expect(res.body.comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              review_id: expect.any(Number),
+              author: expect.any(String),
+              body: expect.any(String),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+            })
+          );
+        });
+    });
+
+    it("Still works when body contains special characters", () => {
+      return request(app)
+        .post("/api/reviews/5/comments")
+        .send({ username: "dav3rid", body: "%%0982340&&@';;" })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment).toEqual(
+            expect.objectContaining({
+              body: "%%0982340&&@';;",
+            })
+          );
+        });
+    });
+
+    it("Returns an error when review_id does not exist", () => {
+      return request(app)
+        .post("/api/reviews/99/comments")
+        .send({ username: "dav3rid", body: "Yo this review is lit" })
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Returns an error when username does not exist", () => {
+      return request(app)
+        .post("/api/reviews/5/comments")
+        .send({ username: "Mr Smack", body: "Yo this review is lit" })
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+
+    it("Returns an error when review_id is not valid", () => {
+      return request(app)
+        .post("/api/reviews/splerg/comments")
+        .send({ username: "dav3rid", body: "Yes this is a body" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
     });
   });
 });

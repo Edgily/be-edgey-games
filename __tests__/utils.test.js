@@ -4,7 +4,6 @@ const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const app = require("../app.js");
 
-beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 const {
@@ -206,7 +205,6 @@ describe("Reviews utils", () => {
   describe("selectCategories()", () => {
     it("returns an array of category values with no duplicates", async () => {
       const result = await selectCategories();
-      console.log(result);
 
       expect(result).toEqual(["euro game", "dexterity", "social deduction"]);
     });

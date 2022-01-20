@@ -1,4 +1,5 @@
 const db = require("../db/connection.js");
+const reviewsRouter = require("../routers/reviews.routers.js");
 
 exports.getReviewsModel = (
   sortQuery = "created_at",
@@ -70,4 +71,30 @@ exports.patchReviewByIdModel = (inc_votes, review_id) => {
   return db
     .query(query, [inc_votes, review_id])
     .then((result) => result.rows[0]);
+};
+
+exports.getCommentsByIdModel = (review_id) => {
+  const query = `
+    SELECT comment_id, author, body, votes, created_at 
+    FROM comments
+    WHERE comments.review_id = ${review_id};
+    `;
+
+  return db.query(query).then((result) => result.rows);
+};
+
+exports.postCommentToIdModel = (reviewIdQuery, usernameQuery, bodyQuery) => {
+  const query = `
+    INSERT INTO comments
+    (review_id, author, body)
+    VALUES
+    ($1, $2, $3)
+    RETURNING *
+    ;`;
+
+  return db
+    .query(query, [reviewIdQuery, usernameQuery, bodyQuery])
+    .then((result) => {
+      return result.rows[0];
+    });
 };
