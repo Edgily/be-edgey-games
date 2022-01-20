@@ -1,4 +1,6 @@
 node_modules
 .env.*
-testpsql.sql
+
+testql.sql
+
 testql_results.md

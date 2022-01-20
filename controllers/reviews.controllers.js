@@ -7,11 +7,6 @@ const {
   postCommentToIdModel,
 } = require("../models/reviews.models.js");
 
-const {
-  selectCategories,
-  removePercent,
-} = require("../utils/reviews.utils.js");
-
 exports.getReviews = async (req, res, next) => {
   try {
     const { sort_by, order, category } = req.query;

@@ -20,11 +20,6 @@ const {
   commentData,
 } = require("../db/data/test-data/index.js");
 
-const {
-  selectCategories,
-  removePercent,
-} = require("../utils/reviews.utils.js");
-
 describe("Seed utils", () => {
   describe("formatCategories()", () => {
     test("returns a formatted array", () => {
@@ -197,22 +192,6 @@ describe("Seed utils", () => {
       formatUsers(commentData);
       expect(commentData[2]).toEqual(expect.objectContaining(result2));
       expect(commentData[4]).toEqual(expect.objectContaining(result4));
-    });
-  });
-});
-
-describe("Reviews utils", () => {
-  describe("selectCategories()", () => {
-    it("returns an array of category values with no duplicates", async () => {
-      const result = await selectCategories();
-
-      expect(result).toEqual(["euro game", "dexterity", "social deduction"]);
-    });
-  });
-
-  describe("removePercent()", () => {
-    it("returns a formatted category without %s", () => {
-      expect(removePercent("social%deduction")).toBe("social deduction");
     });
   });
 });
