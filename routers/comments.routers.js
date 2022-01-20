@@ -1,13 +1,12 @@
 const express = require("express");
 
-const {
-  controllerFunctions,
-} = require("../controllers/comments.controllers.js");
+const { deleteComment } = require("../controllers/comments.controllers.js");
 
 const commentsRouter = express.Router();
 
 // all addresses have /api/comments innately
-commentsRouter.route("/:comment_id").delete(placeHolder).patch(placeHolder);
+commentsRouter.route("/:comment_id").delete(deleteComment);
+// .patch(placeHolder);
 
 module.exports = commentsRouter;
 

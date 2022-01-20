@@ -1,6 +1,6 @@
 exports.invalidEndpoint = (req, res) => {
   return res.status(404).send({
-    message: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
+    msg: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
   });
 };
 

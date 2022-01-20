@@ -7,15 +7,17 @@ const apiRouter = express.Router();
 
 const reviewsRouter = require("../routers/reviews.routers.js");
 // const usersRouter = require("../routers/users.routers.js");
-// const commentsRouter = require("../routers/comments.routers.js");
+const commentsRouter = require("../routers/comments.routers.js");
 
 // all addresses have /api innately
 apiRouter.get("/", getEndpoints);
 apiRouter.get("/categories", getCategories);
 
 apiRouter.use("/reviews", reviewsRouter);
+
 // apiRouter.use("/users", usersRouter);
-// apiRouter.use("/comments", commentsRouter);
+
+apiRouter.use("/comments", commentsRouter);
 
 module.exports = apiRouter;
 

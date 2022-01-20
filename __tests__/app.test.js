@@ -81,8 +81,7 @@ describe("*", () => {
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({
-            message:
-              "Invalid endpoint. Try '/api' to see a list of all endpoints.",
+            msg: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
           });
         });
     });
@@ -93,8 +92,7 @@ describe("*", () => {
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({
-            message:
-              "Invalid endpoint. Try '/api' to see a list of all endpoints.",
+            msg: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
           });
         });
     });
@@ -109,6 +107,22 @@ describe("/api", () => {
         .expect(200)
         .then((res) => {
           expect(typeof res.body).toBe("object");
+
+          expect(res.body.endpoints["GET /api"]).toEqual({
+            description:
+              "Get a JSON file listing all the available endpoints and their parameters/queries.",
+          });
+        });
+    });
+
+    it("Returns error if invalid endpoint", () => {
+      return request(app)
+        .get("/ai")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({
+            msg: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
+          });
         });
     });
   });
@@ -609,7 +623,6 @@ describe("/api/reviews/:review_id/comments", () => {
         .send({ username: "dav3rid", body: "Yo this review is lit" })
         .expect(201)
         .then((res) => {
-          // console.log(res.body);
           expect(res.body.comment).toEqual(
             expect.objectContaining({
               comment_id: expect.any(Number),
@@ -664,6 +677,23 @@ describe("/api/reviews/:review_id/comments", () => {
         .expect(400)
         .then((res) => {
           expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+  });
+});
+
+describe("/api/comments/:comment_id", () => {
+  describe("DELETE", () => {
+    it("Delete comment by comment_id", () => {
+      return request(app).delete("/api/comments/4").expect(204);
+    });
+
+    it("Returns error if no comment found for comment_id", () => {
+      return request(app)
+        .delete("/api/comments/99")
+        .expect(404)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Not found" });
         });
     });
   });
