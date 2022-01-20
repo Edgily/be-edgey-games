@@ -7,6 +7,7 @@ Hosted version: https://edgey-games.herokuapp.com/api
 
 JSON Viewer extension: https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh/related
 
+### Description
 This is a back end project done while studying at Northcoders! It sets up a basic server and database with some test data. Go to the above hosted version link to see a list of all the endpoints and what you can do with them! Definitely recommend having the JSON Viewer extension.
 
 ### Installaton process:
@@ -38,7 +39,7 @@ We need two .env files to tell our code which database it needs to use. Create t
 Within the edgey-games folder in your terminal, run 'npm run setup-dbs' to create the databases on your machine. Then you can run the 'npm run seed' command to seed the dev database. You can also run 'npm run seed:prod' to seed the production database with data.
 
 ### Run Tests
-Simply run the command 'npm t' to run all tests. (Which hopefully should pass!)
+Simply run the command 'npm t' in your terminal to run all tests. (Which hopefully should pass!)
 
 ### You're Done!
-Thanks for checking out my project!
+Thanks for checking out my project! Now you can mess around with accessing the different endpoints.
