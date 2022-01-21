@@ -185,31 +185,105 @@ describe("/api/reviews", () => {
           .get("/api/reviews")
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("created_at", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 7,
+              title: "Mollit elit qui incididunt veniam occaecat cupidatat",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Avery Wunzboogerz",
+              review_img_url:
+                "https://images.pexels.com/photos/278888/pexels-photo-278888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              review_body:
+                "Consectetur incididunt aliquip sunt officia. Magna ex nulla consectetur laboris incididunt ea non qui. Enim id eiusmod irure dolor ipsum in tempor consequat amet ullamco. Occaecat fugiat sint fugiat mollit consequat pariatur consequat non exercitation dolore. Labore occaecat in magna commodo anim enim eiusmod eu pariatur ad duis magna. Voluptate ad et dolore ullamco anim sunt do. Qui exercitation tempor in in minim ullamco fugiat ipsum. Duis irure voluptate cupidatat do id mollit veniam culpa. Velit deserunt exercitation amet laborum nostrud dolore in occaecat minim amet nostrud sunt in. Veniam ut aliqua incididunt commodo sint in anim duis id commodo voluptate sit quis.",
+              votes: 9,
+              created_at: "2021-01-25T11:16:54.963Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 13,
+              title: "Settlers of Catan: Don't Settle For Less",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Klaus Teuber",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+              votes: 16,
+              created_at: "1970-01-10T02:08:38.400Z",
+              comment_count: "0",
             });
           });
       });
 
-      it.skip("Returns an array of review objects with sort_by=title query", () => {
+      it("Returns an array of review objects with sort_by=title query", () => {
         return request(app)
           .get("/api/reviews?sort_by=title")
           .expect(200)
           .then((res) => {
-            console.log(res.body.reviews);
-            expect(res.body.reviews).toBeSortedBy("title", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 9,
+              title: "A truly Quacking Game; Quacks of Quedlinburg",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Wolfgang Warsch",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "Ever wish you could try your hand at mixing potions? Quacks of Quedlinburg will have you mixing up a homebrew like no other. Each player buys different ingredients (chips) that are drawn at random to reach the most points, but watch out, you'd better not let your cauldrom explode.",
+              votes: 10,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "0",
             });
           });
       });
 
-      it("Returns an array of review objects with sort_by=order query", () => {
+      it("Returns an array of review objects with sort_by=owner query", () => {
         return request(app)
           .get("/api/reviews?sort_by=owner")
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("owner", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 2,
+              title: "Jenga",
+              owner: "philippaclaire9",
+              category: "dexterity",
+              designer: "Leslie Scott",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Fiddly fun for all the family",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
             });
           });
       });
@@ -219,8 +293,33 @@ describe("/api/reviews", () => {
           .get("/api/reviews?sort_by=review_id")
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("review_id", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 13,
+              title: "Settlers of Catan: Don't Settle For Less",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Klaus Teuber",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+              votes: 16,
+              created_at: "1970-01-10T02:08:38.400Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 1,
+              title: "Agricola",
+              owner: "mallionaire",
+              category: "euro game",
+              designer: "Uwe Rosenberg",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "Farmyard fun!",
+              votes: 1,
+              created_at: "2021-01-18T10:00:20.514Z",
+              comment_count: "0",
             });
           });
       });
@@ -259,8 +358,34 @@ describe("/api/reviews", () => {
           .get("/api/reviews?order=asc")
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("created_at", {
-              ascending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 13,
+              title: "Settlers of Catan: Don't Settle For Less",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Klaus Teuber",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+              votes: 16,
+              created_at: "1970-01-10T02:08:38.400Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 7,
+              title: "Mollit elit qui incididunt veniam occaecat cupidatat",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Avery Wunzboogerz",
+              review_img_url:
+                "https://images.pexels.com/photos/278888/pexels-photo-278888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              review_body:
+                "Consectetur incididunt aliquip sunt officia. Magna ex nulla consectetur laboris incididunt ea non qui. Enim id eiusmod irure dolor ipsum in tempor consequat amet ullamco. Occaecat fugiat sint fugiat mollit consequat pariatur consequat non exercitation dolore. Labore occaecat in magna commodo anim enim eiusmod eu pariatur ad duis magna. Voluptate ad et dolore ullamco anim sunt do. Qui exercitation tempor in in minim ullamco fugiat ipsum. Duis irure voluptate cupidatat do id mollit veniam culpa. Velit deserunt exercitation amet laborum nostrud dolore in occaecat minim amet nostrud sunt in. Veniam ut aliqua incididunt commodo sint in anim duis id commodo voluptate sit quis.",
+              votes: 9,
+              created_at: "2021-01-25T11:16:54.963Z",
+              comment_count: "0",
             });
           });
       });
@@ -270,8 +395,34 @@ describe("/api/reviews", () => {
           .get("/api/reviews?order=desc")
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("created_at", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 7,
+              title: "Mollit elit qui incididunt veniam occaecat cupidatat",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Avery Wunzboogerz",
+              review_img_url:
+                "https://images.pexels.com/photos/278888/pexels-photo-278888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              review_body:
+                "Consectetur incididunt aliquip sunt officia. Magna ex nulla consectetur laboris incididunt ea non qui. Enim id eiusmod irure dolor ipsum in tempor consequat amet ullamco. Occaecat fugiat sint fugiat mollit consequat pariatur consequat non exercitation dolore. Labore occaecat in magna commodo anim enim eiusmod eu pariatur ad duis magna. Voluptate ad et dolore ullamco anim sunt do. Qui exercitation tempor in in minim ullamco fugiat ipsum. Duis irure voluptate cupidatat do id mollit veniam culpa. Velit deserunt exercitation amet laborum nostrud dolore in occaecat minim amet nostrud sunt in. Veniam ut aliqua incididunt commodo sint in anim duis id commodo voluptate sit quis.",
+              votes: 9,
+              created_at: "2021-01-25T11:16:54.963Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 13,
+              title: "Settlers of Catan: Don't Settle For Less",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Klaus Teuber",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+              votes: 16,
+              created_at: "1970-01-10T02:08:38.400Z",
+              comment_count: "0",
             });
           });
       });
@@ -361,7 +512,7 @@ describe("/api/reviews", () => {
     });
 
     describe("Combination queries", () => {
-      it.skip("Returns a list sorted by title and ordered DESC", () => {
+      it("Returns a list sorted by title and ordered DESC", () => {
         return request(app)
           .get("/api/reviews?sort_by=title&order=desc")
           .expect(200)
@@ -380,8 +531,19 @@ describe("/api/reviews", () => {
               comment_count: "3",
             });
 
-            expect(res.body.reviews).toBeSortedBy("title", {
-              descending: true,
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 9,
+              title: "A truly Quacking Game; Quacks of Quedlinburg",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Wolfgang Warsch",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "Ever wish you could try your hand at mixing potions? Quacks of Quedlinburg will have you mixing up a homebrew like no other. Each player buys different ingredients (chips) that are drawn at random to reach the most points, but watch out, you'd better not let your cauldrom explode.",
+              votes: 10,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "0",
             });
           });
       });
@@ -393,8 +555,33 @@ describe("/api/reviews", () => {
           )
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("designer", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 9,
+              title: "A truly Quacking Game; Quacks of Quedlinburg",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Wolfgang Warsch",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "Ever wish you could try your hand at mixing potions? Quacks of Quedlinburg will have you mixing up a homebrew like no other. Each player buys different ingredients (chips) that are drawn at random to reach the most points, but watch out, you'd better not let your cauldrom explode.",
+              votes: 10,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[10]).toEqual({
+              review_id: 3,
+              title: "Ultimate Werewolf",
+              owner: "bainesface",
+              category: "social deduction",
+              designer: "Akihisa Okui",
+              review_img_url:
+                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+              review_body: "We couldn't find the werewolf!",
+              votes: 5,
+              created_at: "2021-01-18T10:01:41.251Z",
+              comment_count: "3",
             });
 
             res.body.reviews.forEach((item) => {
@@ -423,8 +610,34 @@ describe("/api/reviews", () => {
           )
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("created_at", {
-              descending: true,
+            expect(res.body.reviews[0]).toEqual({
+              review_id: 7,
+              title: "Mollit elit qui incididunt veniam occaecat cupidatat",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Avery Wunzboogerz",
+              review_img_url:
+                "https://images.pexels.com/photos/278888/pexels-photo-278888.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+              review_body:
+                "Consectetur incididunt aliquip sunt officia. Magna ex nulla consectetur laboris incididunt ea non qui. Enim id eiusmod irure dolor ipsum in tempor consequat amet ullamco. Occaecat fugiat sint fugiat mollit consequat pariatur consequat non exercitation dolore. Labore occaecat in magna commodo anim enim eiusmod eu pariatur ad duis magna. Voluptate ad et dolore ullamco anim sunt do. Qui exercitation tempor in in minim ullamco fugiat ipsum. Duis irure voluptate cupidatat do id mollit veniam culpa. Velit deserunt exercitation amet laborum nostrud dolore in occaecat minim amet nostrud sunt in. Veniam ut aliqua incididunt commodo sint in anim duis id commodo voluptate sit quis.",
+              votes: 9,
+              created_at: "2021-01-25T11:16:54.963Z",
+              comment_count: "0",
+            });
+
+            expect(res.body.reviews[12]).toEqual({
+              review_id: 13,
+              title: "Settlers of Catan: Don't Settle For Less",
+              owner: "mallionaire",
+              category: "social deduction",
+              designer: "Klaus Teuber",
+              review_img_url:
+                "https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg",
+              review_body:
+                "You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.",
+              votes: 16,
+              created_at: "1970-01-10T02:08:38.400Z",
+              comment_count: "0",
             });
 
             expect(res.body.reviews.length).toBe(13);
