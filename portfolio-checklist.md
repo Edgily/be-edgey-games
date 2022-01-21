@@ -27,8 +27,7 @@
 ## Tests
 
 - [x] Seeding before each test
-- [ ] Descriptive `it`/`test` block descriptions
-  - Put Status code into the testing blocks
+- [x] Descriptive `it`/`test` block descriptions
 - [x] If asserting inside a `forEach`, also has an assertion to check length is at least > 0
 - [x] Evidence of building up complex query endpoints using TDD
 - [ ] Ensure all tests are passing
@@ -36,7 +35,7 @@
 - `GET /api/categories`
   - [x] Status 200, array of category objects
 - `GET /api/reviews/:review_id`
-  - [ ] Status 200, single review object (including `comment_count`)
+  - [x] Status 200, single review object (including `comment_count`)
   - [x] Status 400, invalid ID, e.g. string of “not-an-id”
   - [x] Status 404, non existent ID, e.g. 0 or 9999
 - review with review_id 1 has no comments, you may need to check your join

@@ -11,6 +11,7 @@ describe("Seed database", () => {
   describe("Categories table", () => {
     it("Returns correct format", () => {
       return db.query(`SELECT * FROM categories;`).then((res) => {
+        expect(res.rows.length).toBe(4);
         res.rows.forEach((category) => {
           expect(category).toEqual({
             slug: expect.any(String),
@@ -24,6 +25,7 @@ describe("Seed database", () => {
   describe("Users table", () => {
     it("Returns correct format", () => {
       return db.query(`SELECT * FROM users;`).then((res) => {
+        expect(res.rows.length).toBe(4);
         res.rows.forEach((user) => {
           expect(user).toEqual({
             username: expect.any(String),
@@ -38,6 +40,7 @@ describe("Seed database", () => {
   describe("Reviews table", () => {
     it("Returns correct format", () => {
       return db.query(`SELECT * FROM reviews;`).then((res) => {
+        expect(res.rows.length).toBe(13);
         res.rows.forEach((review) => {
           expect(review).toEqual({
             review_id: expect.any(Number),
@@ -58,6 +61,7 @@ describe("Seed database", () => {
   describe("Comments table", () => {
     it("Returns correct format", () => {
       return db.query(`SELECT * FROM comments;`).then((res) => {
+        expect(res.rows.length).toBe(6);
         res.rows.forEach((comment) => {
           expect(comment).toEqual({
             comment_id: expect.any(Number),
@@ -101,7 +105,7 @@ describe("*", () => {
 
 describe("/api", () => {
   describe("GET", () => {
-    it("Returns a list of all endpoints", () => {
+    it("status: 200 - Returns a list of all endpoints", () => {
       return request(app)
         .get("/api")
         .expect(200)
@@ -114,23 +118,12 @@ describe("/api", () => {
           });
         });
     });
-
-    it("Returns error if invalid endpoint", () => {
-      return request(app)
-        .get("/ai")
-        .expect(404)
-        .then((res) => {
-          expect(res.body).toEqual({
-            msg: "Invalid endpoint. Try '/api' to see a list of all endpoints.",
-          });
-        });
-    });
   });
 });
 
 describe("/api/categories", () => {
   describe("GET", () => {
-    it("Returns an object with key of 'categories' whose property is an array of category objects with slug and description properties", () => {
+    it("status: 200 - Returns an object with key of 'categories' whose property is an array of category objects with slug and description properties", () => {
       return request(app)
         .get("/api/categories")
         .expect(200)
@@ -155,7 +148,7 @@ describe("/api/categories", () => {
 describe("/api/reviews", () => {
   describe("GET", () => {
     describe("sort_by query", () => {
-      it("Returns an array of review objects", () => {
+      it("status: 200 - Returns an array of review objects", () => {
         return request(app)
           .get("/api/reviews")
           .expect(200)
@@ -180,7 +173,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an array of review objects sorted by created_at DESC by default", () => {
+      it("status: 200 - Returns an array of review objects sorted by created_at DESC by default", () => {
         return request(app)
           .get("/api/reviews")
           .expect(200)
@@ -191,20 +184,18 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an array of review objects with sort_by=title query", () => {
+      it("status: 200 - Returns an array of review objects with sort_by=title query", () => {
         return request(app)
           .get("/api/reviews?sort_by=title")
           .expect(200)
           .then((res) => {
-            console.log(res.body);
-
             expect(res.body.reviews).toBeSortedBy("title", {
               descending: true,
             });
           });
       });
 
-      it("Returns an array of review objects with sort_by=order query", () => {
+      it("status: 200 - Returns an array of review objects with sort_by=order query", () => {
         return request(app)
           .get("/api/reviews?sort_by=owner")
           .expect(200)
@@ -215,7 +206,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an array of review objects with sort_by=review_id query", () => {
+      it("status: 200 - Returns an array of review objects with sort_by=review_id query", () => {
         return request(app)
           .get("/api/reviews?sort_by=review_id")
           .expect(200)
@@ -226,7 +217,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error for a blank sort_by", () => {
+      it("status: 400 - Returns an error for a blank sort_by", () => {
         return request(app)
           .get("/api/reviews?sort_by=")
           .expect(400)
@@ -235,7 +226,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error for an invalid sort_by", () => {
+      it("status: 400 - Returns an error for an invalid sort_by", () => {
         return request(app)
           .get("/api/reviews?sort_by=bana*n;as")
           .expect(400)
@@ -244,7 +235,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error for an invalid sort_by", () => {
+      it("status: 400 - Returns an error for an invalid sort_by", () => {
         return request(app)
           .get("/api/reviews?sordfasdft_y=bana*n;as&osjdf=j'asdfk")
           .expect(400)
@@ -255,7 +246,7 @@ describe("/api/reviews", () => {
     });
 
     describe("order query", () => {
-      it("Returns the list of reviews in ASC order", () => {
+      it("status: 200 - Returns the list of reviews in ASC order", () => {
         return request(app)
           .get("/api/reviews?order=asc")
           .expect(200)
@@ -266,7 +257,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns the list of reviews in DESC order", () => {
+      it("status: 200 - Returns the list of reviews in DESC order", () => {
         return request(app)
           .get("/api/reviews?order=desc")
           .expect(200)
@@ -277,7 +268,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error if invalid value is used", () => {
+      it("status: 400 - Returns an error if invalid value is used", () => {
         return request(app)
           .get("/api/reviews?order=ugh")
           .expect(400)
@@ -286,7 +277,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error if invalid query is used", () => {
+      it("status: 400 - Returns an error if invalid query is used", () => {
         return request(app)
           .get("/api/reviews?ordd=ugh")
           .expect(400)
@@ -297,11 +288,12 @@ describe("/api/reviews", () => {
     });
 
     describe("category query", () => {
-      it("Returns a filtered list based on category query", () => {
+      it("status: 200 - Returns a filtered list based on category query", () => {
         return request(app)
           .get("/api/reviews?category=social%deduction")
           .expect(200)
           .then((res) => {
+            expect(res.body.reviews.length).toBe(11);
             res.body.reviews.forEach((item) => {
               expect(item).toEqual(
                 expect.objectContaining({
@@ -327,11 +319,12 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns a filtered list based on category query", () => {
+      it("status: 200 - Returns a filtered list based on category query", () => {
         return request(app)
           .get("/api/reviews?category=dexterity")
           .expect(200)
           .then((res) => {
+            expect(res.body.reviews.length).toBe(1);
             res.body.reviews.forEach((item) => {
               expect(item).toEqual(
                 expect.objectContaining({
@@ -342,7 +335,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error if invalid value is used", () => {
+      it("status: 404 - Returns an error if invalid value is used", () => {
         return request(app)
           .get("/api/reviews?category=splergula")
           .expect(404)
@@ -351,7 +344,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error if invalid query is used", () => {
+      it("status: 400 - Returns an error if invalid query is used", () => {
         return request(app)
           .get("/api/reviews?categodry=splergula")
           .expect(400)
@@ -362,7 +355,7 @@ describe("/api/reviews", () => {
     });
 
     describe("Combination queries", () => {
-      it("Returns a list sorted by title and ordered DESC", () => {
+      it("status: 200 - Returns a list sorted by title and ordered DESC", () => {
         return request(app)
           .get("/api/reviews?sort_by=title&order=desc")
           .expect(200)
@@ -387,16 +380,14 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns a list sorted by designer DESC with only social deduction category", () => {
+      it("status: 200 - Returns a list sorted by designer DESC with only social deduction category", () => {
         return request(app)
           .get(
             "/api/reviews?sort_by=designer&order=desc&category=social%deduction"
           )
           .expect(200)
           .then((res) => {
-            expect(res.body.reviews).toBeSortedBy("designer", {
-              descending: true,
-            });
+            expect(res.body.reviews.length).toBe(11);
 
             res.body.reviews.forEach((item) => {
               expect(item).toEqual(
@@ -405,10 +396,14 @@ describe("/api/reviews", () => {
                 })
               );
             });
+
+            expect(res.body.reviews).toBeSortedBy("designer", {
+              descending: true,
+            });
           });
       });
 
-      it("Ignores invalid queries when a valid query exists - should return list of all reviews sorted by category DESC", () => {
+      it("status: 404 - Returns an error when category is not found", () => {
         return request(app)
           .get("/api/reviews?sort_by=category&order=desc&category=bananas")
           .expect(404)
@@ -417,7 +412,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Ignores invalid queries when a valid query exists - should return list of all reviews sorted by (default) created_at DESC", () => {
+      it("status: 200 - Returns default list when sort_by and category are undefined/wrong", () => {
         return request(app)
           .get(
             "/api/reviews?sortdf_by=categgurgory&order=desc&categssfory=bananas"
@@ -432,7 +427,7 @@ describe("/api/reviews", () => {
           });
       });
 
-      it("Returns an error if no valid queries exist", () => {
+      it("status: 400 - Returns an error if no valid queries exist", () => {
         return request(app)
           .get(
             "/api/reviews?sortdf_by=categgurgory&ordffer=deesc&categssfory=bananas"
@@ -448,7 +443,7 @@ describe("/api/reviews", () => {
 
 describe("/api/reviews/:review_id", () => {
   describe("GET", () => {
-    it("Returns a review object with correct keys", () => {
+    it("status: 200 - Returns a review object with correct keys for given ID", () => {
       return request(app)
         .get("/api/reviews/2")
         .expect(200)
@@ -471,7 +466,7 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("Returns an error if given an ID with no entries", () => {
+    it("status: 404 - Returns an error if given an ID with no entries", () => {
       return request(app)
         .get("/api/reviews/999")
         .expect(404)
@@ -480,7 +475,7 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("Returns an error if given an invalid ID", () => {
+    it("status: 400 - Returns an error if given an invalid ID", () => {
       return request(app)
         .get("/api/reviews/banana")
         .expect(400)
@@ -491,7 +486,7 @@ describe("/api/reviews/:review_id", () => {
   });
 
   describe("PATCH", () => {
-    it("Returns a review object with votes count updated", () => {
+    it("status: 200 - Returns a review object with votes count updated", () => {
       return request(app)
         .patch("/api/reviews/2")
         .expect(200)
@@ -514,7 +509,7 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("Returns a review object with votes count updated", () => {
+    it("status: 200 - Returns a review object with votes count updated", () => {
       return request(app)
         .patch("/api/reviews/3")
         .expect(200)
@@ -537,7 +532,7 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("Returns an error if given an ID with no entries", () => {
+    it("status: 404 - Returns an error if given an ID with no entries", () => {
       return request(app)
         .patch("/api/reviews/999")
         .send({ inc_votes: 5 })
@@ -547,7 +542,7 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("Return an error when given an invalid ID", () => {
+    it("status: 400 - Return an error when given an invalid ID", () => {
       return request(app)
         .patch("/api/reviews/banana")
         .expect(400)
@@ -561,11 +556,12 @@ describe("/api/reviews/:review_id", () => {
 
 describe("/api/reviews/:review_id/comments", () => {
   describe("GET", () => {
-    it("Returns an array of comments for the given review_id 2", () => {
+    it("status: 200 - Returns an array of comments for the given review_id 2", () => {
       return request(app)
         .get("/api/reviews/2/comments")
         .expect(200)
         .then((res) => {
+          expect(res.body.comments.length).toBe(3);
           res.body.comments.forEach((item) => {
             expect(item).toEqual(
               expect.objectContaining({
@@ -580,11 +576,12 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an array of comments for the given review_id 3", () => {
+    it("status: 200 - Returns an array of comments for the given review_id 3", () => {
       return request(app)
         .get("/api/reviews/3/comments")
         .expect(200)
         .then((res) => {
+          expect(res.body.comments.length).toBe(3);
           res.body.comments.forEach((item) => {
             expect(item).toEqual(
               expect.objectContaining({
@@ -599,7 +596,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an error when searching a valid ID that has no entries", () => {
+    it("status: 404 - Returns an error when searching a valid ID that has no entries", () => {
       return request(app)
         .get("/api/reviews/999/comments")
         .expect(404)
@@ -608,7 +605,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an error when searching an invalid ID", () => {
+    it("status: 400 - Returns an error when searching an invalid ID", () => {
       return request(app)
         .get("/api/reviews/spatula/comments")
         .expect(400)
@@ -619,7 +616,7 @@ describe("/api/reviews/:review_id/comments", () => {
   });
 
   describe("POST", () => {
-    it("Posts a new comment and returns the posted comment", () => {
+    it("status: 201 - Posts a new comment and returns the posted comment", () => {
       return request(app)
         .post("/api/reviews/5/comments")
         .send({ username: "dav3rid", body: "Yo this review is lit" })
@@ -638,7 +635,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Still works when body contains special characters", () => {
+    it("status: 201 - Still works when body contains special characters", () => {
       return request(app)
         .post("/api/reviews/5/comments")
         .send({ username: "dav3rid", body: "%%0982340&&@';;" })
@@ -652,7 +649,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an error when review_id does not exist", () => {
+    it("status: 404 - Returns an error when review_id does not exist", () => {
       return request(app)
         .post("/api/reviews/99/comments")
         .send({ username: "dav3rid", body: "Yo this review is lit" })
@@ -662,7 +659,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an error when username does not exist", () => {
+    it("status: 404 - Returns an error when username does not exist", () => {
       return request(app)
         .post("/api/reviews/5/comments")
         .send({ username: "Mr Smack", body: "Yo this review is lit" })
@@ -672,7 +669,7 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("Returns an error when review_id is not valid", () => {
+    it("status: 400 - Returns an error when review_id is not valid", () => {
       return request(app)
         .post("/api/reviews/splerg/comments")
         .send({ username: "dav3rid", body: "Yes this is a body" })
@@ -686,11 +683,11 @@ describe("/api/reviews/:review_id/comments", () => {
 
 describe("/api/comments/:comment_id", () => {
   describe("DELETE", () => {
-    it("Delete comment by comment_id", () => {
+    it("status: 204 - Delete comment by comment_id", () => {
       return request(app).delete("/api/comments/4").expect(204);
     });
 
-    it("Returns error if no comment found for comment_id", () => {
+    it("status: 404 - Returns error if no comment found for comment_id", () => {
       return request(app)
         .delete("/api/comments/99")
         .expect(404)
@@ -709,6 +706,7 @@ describe.skip("/api/users", () => {
         .expect(200)
         .then((res) => {
           console.log(res.body);
+          expect(res.body.users.length).toBe(4);
           res.body.users.forEach(
             expect.objectContaining({
               username: expect.any(String),
