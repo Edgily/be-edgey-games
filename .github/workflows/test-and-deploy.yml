@@ -15,7 +15,7 @@ jobs:
         run: echo 'Howdy doodle from CI'
 
       - name: say bye
-        run: cho 'laterzzz'
+        run: echo 'laterzzz'
 
   test:
     runs-on: ubuntu-latest
