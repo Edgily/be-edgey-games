@@ -28,7 +28,7 @@ jobs:
           postgresql password: "test_password"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Run tests
         run: PGDATABASE=test_db PGUSER=test_user PGPASSWORD=test_password npm t
