@@ -486,7 +486,7 @@ describe("/api/reviews/:review_id", () => {
   });
 
   describe("PATCH", () => {
-    it("status: 200 - Returns a review object with votes count updated", () => {
+    it("status: 200 - Returns a review object with votes count incremented", () => {
       return request(app)
         .patch("/api/reviews/2")
         .expect(200)
@@ -509,11 +509,11 @@ describe("/api/reviews/:review_id", () => {
         });
     });
 
-    it("status: 200 - Returns a review object with votes count updated", () => {
+    it("status: 200 - Returns a review object with votes count decremented", () => {
       return request(app)
         .patch("/api/reviews/3")
         .expect(200)
-        .send({ inc_votes: 3 })
+        .send({ inc_votes: -3 })
         .then((res) => {
           expect(res.body).toEqual({
             updated: {
@@ -525,7 +525,7 @@ describe("/api/reviews/:review_id", () => {
               review_img_url:
                 "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
               review_body: "We couldn't find the werewolf!",
-              votes: 8,
+              votes: 2,
               created_at: "2021-01-18T10:01:41.251Z",
             },
           });
@@ -547,6 +547,37 @@ describe("/api/reviews/:review_id", () => {
         .patch("/api/reviews/banana")
         .expect(400)
         .send({ inc_votes: 5 })
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+
+    it("status: 200 - Return the unchanged review if inc_votes is missing/invalid", () => {
+      return request(app)
+        .patch("/api/reviews/3")
+        .expect(200)
+        .send({ invalid: 5 })
+        .then((res) => {
+          expect(res.body.updated).toEqual({
+            review_id: 3,
+            title: "Ultimate Werewolf",
+            owner: "bainesface",
+            category: "social deduction",
+            designer: "Akihisa Okui",
+            review_img_url:
+              "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+            review_body: "We couldn't find the werewolf!",
+            votes: null,
+            created_at: "2021-01-18T10:01:41.251Z",
+          });
+        });
+    });
+
+    it("status: 400 - Return an error when given an invalid body value", () => {
+      return request(app)
+        .patch("/api/reviews/3")
+        .expect(400)
+        .send({ inc_votes: "banana" })
         .then((res) => {
           expect(res.body).toEqual({ msg: "Bad request" });
         });

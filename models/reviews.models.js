@@ -61,16 +61,28 @@ exports.getReviewByIdModel = (review_id) => {
 };
 
 exports.patchReviewByIdModel = (inc_votes, review_id) => {
-  const query = `
+  let votesMod = inc_votes;
+
+  let query = `
     UPDATE reviews
     SET votes = votes + $1
     WHERE review_id = $2
     RETURNING *
     ;`;
 
-  return db
-    .query(query, [inc_votes, review_id])
-    .then((result) => result.rows[0]);
+  if (inc_votes < 0) {
+    votesMod = JSON.stringify(votesMod).replace("-", "");
+    query = `
+        UPDATE reviews
+        SET votes = votes - $1
+        WHERE review_id = $2
+        RETURNING *
+        ;`;
+  }
+
+  return db.query(query, [votesMod, review_id]).then((result) => {
+    return result.rows[0];
+  });
 };
 
 exports.getCommentsByIdModel = (review_id) => {

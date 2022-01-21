@@ -42,12 +42,9 @@
 - `PATCH /api/reviews/:review_id`
   - [x] Status 200, updated single review object
   - [x] Status 400, invalid ID, e.g. string of “not-an-id”
-  - [ ] Status 400, invalid inc_votes type, e.g. property is not a number
+  - [x] Status 400, invalid inc_votes type, e.g. property is not a number
   - [x] Status 404, non existent ID, e.g. 0 or 9999
-  - [ ] Status 200, missing `inc_votes` key. No effect to article.
-- send the updated review with a key of `review`not updated
-- test for decrementation on votes, not just incrementation
-- ignore a `patch` request with no information in the request body, and send the unchanged review to the client
+  - [x] Status 200, missing `inc_votes` key. No effect to article.
 - `GET /api/reviews`
   - [x] Status 200, array of review objects (including `comment_count`, excluding `body`)
   - [x] Status 200, default sort & order: `created_at`, `desc`
