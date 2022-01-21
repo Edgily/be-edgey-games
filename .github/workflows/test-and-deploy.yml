@@ -23,8 +23,18 @@ jobs:
       - name: Checkout and clone the repo
         uses: actions/checkout@v2
 
+      - name: Setup database
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql db: edgey-games
+          postgresql user: edgey
+          postgresql password: gethacked
+
       - name: Install dependencies
         run: npm i
 
       - name: Run utils tests
         run: npm t utils
+
+      - name: Run app tests
+        run: PGDATABASE=edgey-games PGUSER=edgey PGPASSWORD=gethacked npm t app
