@@ -16,3 +16,15 @@ jobs:
 
       - name: say bye
         run: cho 'laterzzz'
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout and clone the repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Run utils tests
+        run: npm t utils
