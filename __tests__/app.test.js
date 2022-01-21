@@ -196,6 +196,8 @@ describe("/api/reviews", () => {
           .get("/api/reviews?sort_by=title")
           .expect(200)
           .then((res) => {
+            console.log(res.body);
+
             expect(res.body.reviews).toBeSortedBy("title", {
               descending: true,
             });
@@ -694,6 +696,24 @@ describe("/api/comments/:comment_id", () => {
         .expect(404)
         .then((res) => {
           expect(res.body).toEqual({ msg: "Not found" });
+        });
+    });
+  });
+});
+
+describe.skip("/api/users", () => {
+  describe("GET", () => {
+    it("Returns an array of objects with property 'username'", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then((res) => {
+          console.log(res.body);
+          res.body.users.forEach(
+            expect.objectContaining({
+              username: expect.any(String),
+            })
+          );
         });
     });
   });

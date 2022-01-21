@@ -31,14 +31,14 @@ const seed = (data) => {
         return db.query(`
           CREATE TABLE categories (
             slug VARCHAR(255) PRIMARY KEY,
-            description VARCHAR(1000)
+            description VARCHAR(1000) NOT NULL
           );`);
       })
       .then(() => {
         return db.query(`
           CREATE TABLE users (
             username VARCHAR(255) PRIMARY KEY,
-            avatar_url VARCHAR(1000), 
+            avatar_url VARCHAR(1000) NOT NULL, 
             name VARCHAR(255)
           );`);
       })
@@ -48,10 +48,10 @@ const seed = (data) => {
             review_id SERIAL PRIMARY KEY,
             title VARCHAR(255) NOT NULL,
             owner VARCHAR(255) REFERENCES users(username) NOT NULL,
-            category VARCHAR(255) REFERENCES categories(slug),
-            designer VARCHAR(255),
+            category VARCHAR(255) REFERENCES categories(slug) NOT NULL,
+            designer VARCHAR(255) NOT NULL,
             review_img_url VARCHAR(1000) DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
-            review_body TEXT,
+            review_body TEXT NOT NULL,
             votes INT DEFAULT 0,
             created_at TIMESTAMP DEFAULT NOW()
           );`);
@@ -60,9 +60,9 @@ const seed = (data) => {
         return db.query(`
           CREATE TABLE comments (
             comment_id SERIAL PRIMARY KEY,
-            review_id INT REFERENCES reviews(review_id),
+            review_id INT REFERENCES reviews(review_id) NOT NULL,
             author VARCHAR(255) REFERENCES users(username) NOT NULL,
-            body VARCHAR(1000),
+            body VARCHAR(1000) NOT NULL,
             votes INT DEFAULT 0,
             created_at TIMESTAMP DEFAULT NOW()
           );`);
