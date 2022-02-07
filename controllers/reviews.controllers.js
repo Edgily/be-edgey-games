@@ -98,6 +98,8 @@ exports.getCommentsById = async (req, res, next) => {
 
       if (comments.length > 0) {
         return res.status(200).send({ comments });
+      } else if (Array.isArray(comments)) {
+        throw { status: 200, msg: "No associated comments for that review ID" };
       } else {
         throw { status: 404, msg: "Not found" };
       }

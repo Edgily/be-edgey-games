@@ -627,12 +627,14 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
-    it("status: 404 - Returns an error when searching a valid ID that has no entries", () => {
+    it("status: 200 - Returns an empty array of comments when review_id has no associated comments", () => {
       return request(app)
-        .get("/api/reviews/999/comments")
-        .expect(404)
+        .get("/api/reviews/1/comments")
+        .expect(200)
         .then((res) => {
-          expect(res.body).toEqual({ msg: "Not found" });
+          expect(res.body).toEqual({
+            msg: "No associated comments for that review ID",
+          });
         });
     });
 

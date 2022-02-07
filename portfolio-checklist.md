@@ -60,7 +60,7 @@
   - [x] Status 200, array of comment objects for the specified review
   - [x] Status 400, invalid ID, e.g. string of “not-an-id”
   - [x] Status 404, non existent ID, e.g. 0 or 9999
-  - [ ] Status 200, valid ID, but has no comments responds with an empty array of comments
+  - [x] Status 200, valid ID, but has no comments responds with an empty array of comments
   - return 200: OK when the article exists but no comments
   - Be wary of using forEach without first checking the length of the array
 - `POST /api/reviews/:review_id/comments`
