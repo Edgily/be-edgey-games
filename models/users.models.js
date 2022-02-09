@@ -21,3 +21,17 @@ exports.postUsersModel = ({ username, name, avatar_url }) => {
     .query(query, [username, name, avatar_url])
     .then((result) => result.rows[0]);
 };
+
+// commented out until can figure out SQL shenanigans
+// exports.deleteUserModel = ({ username }) => {
+//   console.log("***MODEL***");
+//   console.log(username);
+
+//   const query = `
+//     DELETE FROM users
+//     WHERE username = $1
+//     RETURNING *;
+//   ;`;
+
+//   return db.query(query, [username]).then((result) => console.log(res.rows));
+// };

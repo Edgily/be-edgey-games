@@ -788,7 +788,7 @@ describe("/api/users", () => {
     });
   });
 
-  describe("PATCH", () => {
+  describe("POST", () => {
     it("status: 201 - Updates the users table with a new user and returns that new user as a user object", () => {
       return request(app)
         .post("/api/users")
@@ -872,3 +872,12 @@ describe("/api/users", () => {
     });
   });
 });
+
+// commented out until can figure out SQL shenanigans
+// describe("/api/users/:username", () => {
+//   describe("DELETE", () => {
+//     it("status: 204 - Deletes the specified user", () => {
+//       return request(app).delete("/api/users/mallionaire").expect(204);
+//     });
+//   });
+// });

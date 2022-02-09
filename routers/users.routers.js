@@ -1,13 +1,19 @@
 const express = require("express");
 
-const { getUsers, postUsers } = require("../controllers/users.controllers.js");
+const {
+  getUsers,
+  postUsers,
+  deleteUser,
+} = require("../controllers/users.controllers.js");
 
 const usersRouter = express.Router();
 
 // all addresses have /api/users innately
 usersRouter.route("/").get(getUsers);
 usersRouter.route("/").post(postUsers);
-// usersRouter.route("/").delete(placeholder);
+
+// commented out until can figure out SQL shenanigans
+// usersRouter.route("/:username").delete(deleteUser);
 
 // usersRouter.route("/:username").get(placeHolder);
 
