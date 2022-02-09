@@ -11,7 +11,7 @@ exports.errorCustom = (err, req, res, next) => {
 };
 
 exports.errorPsql = (err, req, res, next) => {
-  if (err.code === "22P02" || err.code === "42601") {
+  if (err.code === "22P02" || err.code === "42601" || err.code === "23502") {
     return res.status(400).send({ msg: "Bad request" });
   } else if (err.code === "23503" || err.code === "42703") {
     return res.status(404).send({ msg: "Not found" });

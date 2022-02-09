@@ -1,11 +1,13 @@
 const express = require("express");
 
-const { getUsers } = require("../controllers/users.controllers.js");
+const { getUsers, postUsers } = require("../controllers/users.controllers.js");
 
 const usersRouter = express.Router();
 
 // all addresses have /api/users innately
 usersRouter.route("/").get(getUsers);
+usersRouter.route("/").post(postUsers);
+// usersRouter.route("/").delete(placeholder);
 
 // usersRouter.route("/:username").get(placeHolder);
 

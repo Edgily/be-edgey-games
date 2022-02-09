@@ -706,6 +706,20 @@ describe("/api/reviews/:review_id/comments", () => {
         });
     });
 
+    it("status: 201 - Works for other users", () => {
+      return request(app)
+        .post("/api/reviews/5/comments")
+        .send({ username: "bainesface", body: "%%0982340&&@';;" })
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment).toEqual(
+            expect.objectContaining({
+              body: "%%0982340&&@';;",
+            })
+          );
+        });
+    });
+
     it("status: 404 - Returns an error when review_id does not exist", () => {
       return request(app)
         .post("/api/reviews/99/comments")
@@ -755,20 +769,105 @@ describe("/api/comments/:comment_id", () => {
   });
 });
 
-describe.skip("/api/users", () => {
+describe("/api/users", () => {
   describe("GET", () => {
-    it("Returns an array of objects with property 'username'", () => {
+    it("status: 200 - Returns an array of objects with property 'username'", () => {
       return request(app)
         .get("/api/users")
         .expect(200)
         .then((res) => {
-          console.log(res.body);
           expect(res.body.users.length).toBe(4);
-          res.body.users.forEach(
+          res.body.users.forEach((item) => {
             expect.objectContaining({
               username: expect.any(String),
-            })
-          );
+              avatar_url: expect.any(String),
+              name: expect.any(String),
+            });
+          });
+        });
+    });
+  });
+
+  describe("PATCH", () => {
+    it("status: 201 - Updates the users table with a new user and returns that new user as a user object", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          username: "splerg",
+          name: "Sma",
+          avatar_url:
+            "https://www.livehappy.com/wp-content/uploads/2018/02/happy.jpg",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body).toEqual({
+            user: {
+              username: "splerg",
+              avatar_url:
+                "https://www.livehappy.com/wp-content/uploads/2018/02/happy.jpg",
+              name: "Sma",
+            },
+          });
+        });
+    });
+
+    it("status: 400 - Returns 'bad request' when a required field is undefined", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          username: undefined,
+          name: "Sma",
+          avatar_url:
+            "https://www.livehappy.com/wp-content/uploads/2018/02/happy.jpg",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+
+    it("status: 400 - Returns 'bad request' when a required field is missing", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          username: "splerg",
+          avatar_url:
+            "https://www.livehappy.com/wp-content/uploads/2018/02/happy.jpg",
+        })
+        .expect(400)
+        .then((res) => {
+          expect(res.body).toEqual({ msg: "Bad request" });
+        });
+    });
+
+    it("status: 201 - Does not throw an error for non-required field being undefined", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          username: "splerg",
+          name: "Sma",
+          avatar_url: undefined,
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body).toEqual({
+            user: { username: "splerg", avatar_url: null, name: "Sma" },
+          });
+        });
+    });
+
+    it("status: 201 - Does not throw an error for non-required field being missing", () => {
+      return request(app)
+        .post("/api/users")
+        .send({
+          username: "splerg",
+          name: "Sma",
+        })
+        .expect(201)
+        .then((res) => {
+          expect(res.body).toEqual({
+            user: { username: "splerg", avatar_url: null, name: "Sma" },
+          });
         });
     });
   });

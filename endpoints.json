@@ -97,5 +97,27 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "Deletes the comment of given comment ID."
+  },
+  "GET /api/users": {
+    "description": "Get a list of all users from the database.",
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "mallionaire",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+          "name": "haz"
+        }
+      ]
+    }
+  },
+  "POST /api/users": {
+    "description": "Post a new user to the database and get that newly created user as an object",
+    "exampleResponse": {
+      "user": {
+        "username": "splerg",
+        "avatar_url": "https://www.livehappy.com/wp-content/uploads/2018/02/happy.jpg",
+        "name": "Sma"
+      }
+    }
   }
 }
