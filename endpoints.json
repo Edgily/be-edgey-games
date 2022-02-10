@@ -111,7 +111,12 @@
     }
   },
   "POST /api/users": {
-    "description": "Post a new user to the database and get that newly created user as an object",
+    "description": "Post a new user to the database and get that newly created user as an object. Needs body with username and name keys. Optional avatar_url key.",
+    "bodyStructure": {
+      "username": "username",
+      "name": "name",
+      "avatar_url": "https://someurl.com (can be undefined)"
+    },
     "exampleResponse": {
       "user": {
         "username": "splerg",
