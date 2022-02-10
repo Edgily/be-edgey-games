@@ -33,7 +33,9 @@ exports.getReviews = async (req, res, next) => {
 
     if (category) {
       if (/^[\w-]+$/.test(category)) {
-        categoryQuery = category.replace("-", " ");
+        const searchRegExp = /-/g;
+
+        categoryQuery = category.replace(searchRegExp, " ");
       } else {
         categoryQuery = undefined;
       }

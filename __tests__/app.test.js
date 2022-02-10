@@ -336,6 +336,22 @@ describe("/api/reviews", () => {
           });
       });
 
+      it("status: 200 - Returns a filtered list based on category query", () => {
+        return request(app)
+          .get("/api/reviews?category=social-deduction")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.reviews.length).toBe(11);
+            res.body.reviews.forEach((item) => {
+              expect(item).toEqual(
+                expect.objectContaining({
+                  category: "social deduction",
+                })
+              );
+            });
+          });
+      });
+
       it("status: 404 - Returns an error if invalid value is used", () => {
         return request(app)
           .get("/api/reviews?category=splergula")
