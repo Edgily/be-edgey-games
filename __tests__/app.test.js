@@ -291,7 +291,7 @@ describe("/api/reviews", () => {
     describe("category query", () => {
       it("status: 200 - Returns a filtered list based on category query", () => {
         return request(app)
-          .get("/api/reviews?category=social%deduction")
+          .get("/api/reviews?category=social-deduction")
           .expect(200)
           .then((res) => {
             expect(res.body.reviews.length).toBe(11);
@@ -384,7 +384,7 @@ describe("/api/reviews", () => {
       it("status: 200 - Returns a list sorted by designer DESC with only social deduction category", () => {
         return request(app)
           .get(
-            "/api/reviews?sort_by=designer&order=desc&category=social%deduction"
+            "/api/reviews?sort_by=designer&order=desc&category=social-deduction"
           )
           .expect(200)
           .then((res) => {

@@ -32,8 +32,8 @@ exports.getReviews = async (req, res, next) => {
     }
 
     if (category) {
-      if (/^[\w%]+$/.test(category)) {
-        categoryQuery = category.replace("%", " ");
+      if (/^[\w-]+$/.test(category)) {
+        categoryQuery = category.replace("-", " ");
       } else {
         categoryQuery = undefined;
       }
