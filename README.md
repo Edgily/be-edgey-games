@@ -11,7 +11,6 @@ JSON Viewer extension: https://chrome.google.com/webstore/detail/json-viewer/gbm
 This is a back end project done while studying at Northcoders! It sets up a basic server and database with some test data. Go to the above hosted version link to see a list of all the endpoints and what you can do with them! Definitely recommend having the JSON Viewer extension.
 
 ### Installaton process:
-
 1. Clone
 2. Install Dependencies
 3. Create .env Files
@@ -19,7 +18,7 @@ This is a back end project done while studying at Northcoders! It sets up a basi
 5. Run Tests
 
 ### Clone
-On the repo main page near the top there is a bright green 'Code' button, click it. You then need to copy the URL displayed. In your terminal (command line), navigate to the folder where you wish to clone the project to. Then run the command 'git clone PROJECT_URL' e.g. 'git clone https://github.com/Edgily/edgey-games'. This will install everything into an 'edgey-games' folder.
+On the repo main page near the top there is a bright green 'Code' button, click it. You then need to copy the URL displayed. In your terminal (command line), navigate to the folder where you wish to clone the project to. Then run the command 'git clone PROJECT_URL' e.g. 'git clone https://github.com/Edgily/be-edgey-games'. This will install everything into an 'edgey-games' folder.
 
 ### Install Dependencies
 This project was made with (and may depend on):
