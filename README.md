@@ -24,7 +24,7 @@ This is a back end project done while studying at Northcoders! It sets up a basi
 2. Install Dependencies
 3. Create .env Files
 4. Seed Database
-5. Run Tests
+5. ??? Pofit
 
 ### Clone
 
@@ -50,6 +50,6 @@ Within the edgey-games folder in your terminal, run 'npm run setup-dbs' to creat
 
 Simply run the command 'npm t' in your terminal to run all tests. (Which hopefully should pass!)
 
-### You're Done!
+### ??? Profit
 
 Thanks for checking out my project! Now you can mess around with accessing the different endpoints.
