@@ -1,22 +1,10 @@
-# Edgey Games
-
-### Portfolio PSQL Database and Server Project
-
-PSQL Back End Project links:
+# <a href="https://be-edgey-games.herokuapp.com/api">Edgey Games API</a>
 
 - https://be-edgey-games.herokuapp.com/api
-- https://github.com/Edgily/be-edgey-games
-
-React Front End Project links:
-
-- https://fe-edgey-games.netlify.app/
-- https://github.com/Edgily/fe-edgey-games
-
-JSON Viewer extension: https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh/related
 
 ### Description
 
-This is a back end project done while studying at Northcoders! It sets up a basic server and database with some test data. Go to the above hosted version link to see a list of all the endpoints and what you can do with them! Definitely recommend having the JSON Viewer extension.
+This is a back end project done while studying at Northcoders! It sets up a basic server and database with some test data. Go to the above hosted version link to see a list of all the endpoints and what you can do with them! Definitely recommend having a <a href="https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh">JSON Viewer</a> extension.
 
 ### Installaton process:
 
